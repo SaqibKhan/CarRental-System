@@ -1,0 +1,236 @@
+<div class="car-list-container">
+  <!-- Hero Banner -->
+  <section class="cars-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-icon">
+        <i class="bi bi-car-front-fill"></i>
+      </div>
+      <h1>Find Your Perfect Ride</h1>
+      <p>Explore our premium collection of vehicles for every journey</p>
+    </div>
+  </section>
+
+  <!-- Filters Section -->
+  <section class="filters-section">
+    <div class="filters-header">
+      <h2><i class="bi bi-funnel-fill"></i> Filter & Search</h2>
+      <div class="header-actions">
+        @if (pagination().totalItems > 0) {
+          <span class="results-count">
+            Showing {{ displayedCarsRange().start }}-{{ displayedCarsRange().end }} of {{ displayedCarsRange().total }} vehicles
+          </span>
+        } @else {
+          <span class="results-count">No vehicles found</span>
+        }
+        <button mat-icon-button (click)="refreshData()" class="refresh-btn" matTooltip="Refresh data">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+    </div>
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Car name, plate...">
+        <i class="bi bi-search" matPrefix style="margin-right: 8px; color: #64748b;"></i>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Car Type</mat-label>
+        <mat-select [(ngModel)]="selectedCarType" (ngModelChange)="onCarTypeChange()">
+          <mat-option [value]="null">All Types</mat-option>
+          @for (type of carTypes; track type.value) {
+            <mat-option [value]="type.value">{{ type.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Max Price/Day</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="maxPrice"
+          (ngModelChange)="onPriceChange()"
+          min="0">
+        <i class="bi bi-currency-dollar" matPrefix style="margin-right: 8px; color: #64748b;"></i>
+      </mat-form-field>
+
+      <button mat-stroked-button (click)="clearFilters()" class="clear-filters-btn">
+        <i class="bi bi-x-circle"></i> Clear
+      </button>
+    </div>
+  </section>
+
+  <app-loading [isLoading]="isLoading()" message="Loading cars..."></app-loading>
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="error-state">
+      <div class="error-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
+      <h3>Oops! Something went wrong</h3>
+      <p>{{ errorMessage() }}</p>
+      <button mat-raised-button color="primary" (click)="refreshData()">
+        <i class="bi bi-arrow-clockwise"></i> Try Again
+      </button>
+    </div>
+  }
+
+  @if (!isLoading() && !errorMessage()) {
+    @if (!hasResults()) {
+      <div class="no-cars">
+        <div class="no-cars-icon">
+          <i class="bi bi-search"></i>
+        </div>
+        <h3>No cars found</h3>
+        <p>Try adjusting your search or filter criteria</p>
+        <button mat-stroked-button color="primary" (click)="clearFilters()">
+          <i class="bi bi-x-circle"></i> Clear Filters
+        </button>
+      </div>
+    } @else {
+      <!-- Cars Grid -->
+      <div class="cars-grid">
+        @for (car of cars(); track car.id) {
+          <mat-card class="car-card">
+            <div class="image-wrap">
+              <img
+                mat-card-image
+                [src]="getImageUrl(car.imageUrl)"
+                [alt]="car.carName"
+                (error)="onImageError($event)"
+                loading="lazy">
+              <div class="price-badge">
+                <span class="amount">${{ car.dailyPrice }}</span>
+                <span class="period">/day</span>
+              </div>
+              <span class="availability-badge" [class.available]="isCarAvailable(car)" [class.unavailable]="!isCarAvailable(car)">
+                <i class="bi" [class.bi-check-circle-fill]="isCarAvailable(car)" [class.bi-x-circle-fill]="!isCarAvailable(car)"></i>
+                {{ isCarAvailable(car) ? 'Available' : 'Unavailable' }}
+              </span>
+            </div>
+
+            <mat-card-content>
+              <div class="car-header">
+                <div class="car-title">
+                  <h3>{{ car.carName }}</h3>
+                  <span class="year-badge"> {{ car.modelYear }}</span>
+                </div>
+              </div>
+
+              <div class="category-badge">
+                <i class="bi bi-tag-fill"></i>
+                {{ getCarTypeLabel(car.carType) }}
+              </div>
+
+              <div class="car-info">
+                <span class="info-item">
+                  <i class="bi bi-credit-card-2-front"></i>
+                  {{ car.numberPlate }}
+                </span>
+              </div>
+
+              @if (car.description) {
+                <p class="car-description">{{ car.description | slice:0:80 }}{{ car.description.length > 80 ? '...' : '' }}</p>
+              }
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button mat-stroked-button color="primary" (click)="openCarDetails(car)" class="action-btn">
+                <i class="bi bi-eye"></i>
+                Details
+              </button>
+              <button mat-raised-button color="primary" (click)="bookCar(car)" [disabled]="!isCarAvailable(car)" class="action-btn book-btn">
+                <i class="bi bi-calendar-plus"></i>
+                Book Now
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+
+      <!-- Pagination Section -->
+      @if (pagination().totalPages > 1) {
+        <section class="pagination-section">
+          <div class="pagination-container">
+            <!-- Page Size Selector -->
+            <div class="page-size-selector">
+              <span class="page-size-label">Items per page:</span>
+              <mat-form-field appearance="outline" class="page-size-field">
+                <mat-select
+                  [value]="pagination().pageSize"
+                  (selectionChange)="onPageChange({pageIndex: 0, pageSize: $event.value, length: pagination().totalItems})">
+                  @for (size of pagination().pageSizeOptions; track size) {
+                    <mat-option [value]="size">{{ size }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Custom Pagination Controls -->
+            <div class="pagination-controls">
+              <button
+                mat-icon-button
+                class="pagination-btn first-page"
+                [disabled]="isFirstPage()"
+                (click)="goToFirstPage()"
+                aria-label="First page">
+                <i class="bi bi-chevron-double-left"></i>
+              </button>
+
+              <button
+                mat-icon-button
+                class="pagination-btn prev-page"
+                [disabled]="isFirstPage()"
+                (click)="goToPreviousPage()"
+                aria-label="Previous page">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+
+              <div class="page-numbers">
+                @for (page of getPageNumbers(); track page) {
+                  <button
+                    mat-button
+                    class="page-number-btn"
+                    [class.active]="page === pagination().currentPage"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                  </button>
+                }
+              </div>
+
+              <button
+                mat-icon-button
+                class="pagination-btn next-page"
+                [disabled]="isLastPage()"
+                (click)="goToNextPage()"
+                aria-label="Next page">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+
+              <button
+                mat-icon-button
+                class="pagination-btn last-page"
+                [disabled]="isLastPage()"
+                (click)="goToLastPage()"
+                aria-label="Last page">
+                <i class="bi bi-chevron-double-right"></i>
+              </button>
+            </div>
+
+            <!-- Page Info -->
+            <div class="pagination-info">
+              <span>Page {{ pagination().currentPage }} of {{ pagination().totalPages }}</span>
+            </div>
+          </div>
+        </section>
+      }
+    }
+  }
+</div>

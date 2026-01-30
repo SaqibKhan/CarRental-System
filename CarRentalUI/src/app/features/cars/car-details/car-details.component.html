@@ -1,0 +1,109 @@
+<div class="car-details-container">
+  <app-loading [isLoading]="isLoading()" [fullscreen]="true"></app-loading>
+
+  @if (car(); as carData) {
+    <!-- Back Navigation -->
+    <div class="back-nav">
+      <button mat-button (click)="goBack()" class="back-btn">
+        <i class="bi bi-arrow-left"></i>
+        Back to Cars
+      </button>
+    </div>
+
+    <div class="car-details">
+      <!-- Image Section -->
+      <div class="image-section">
+        <img
+          [src]="getImageUrl(carData.imageUrl)"
+          [alt]="carData.carName"
+          (error)="onImageError($event)">
+        <div class="availability-badge" [class.available]="isCarAvailable(carData)" [class.unavailable]="!isCarAvailable(carData)">
+          <i class="bi" [class.bi-check-circle-fill]="isCarAvailable(carData)" [class.bi-x-circle-fill]="!isCarAvailable(carData)"></i>
+          {{ isCarAvailable(carData) ? 'Available' : 'Unavailable' }}
+        </div>
+        <div class="price-badge">
+          <span class="amount">${{ carData.dailyPrice }}</span>
+          <span class="period">/day</span>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section">
+        <!-- Header -->
+        <div class="car-header">
+          <h1>{{ carData.carName }}</h1>
+          <span class="year-badge">{{ carData.modelYear }}</span>
+        </div>
+
+        <div class="category-badge">
+          <i class="bi bi-tag-fill"></i>
+          {{ getCarTypeLabel(carData.carType) }}
+        </div>
+
+        <!-- Details Grid -->
+        <div class="details-grid">
+          <div class="detail-item">
+            <i class="bi bi-car-front-fill"></i>
+            <div>
+              <span class="label">Car Name</span>
+              <span class="value">{{ carData.carName }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <i class="bi bi-calendar3"></i>
+            <div>
+              <span class="label">Model Year</span>
+              <span class="value">{{ carData.modelYear }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <i class="bi bi-credit-card-2-front"></i>
+            <div>
+              <span class="label">Number Plate</span>
+              <span class="value">{{ carData.numberPlate }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <i class="bi bi-cash-stack"></i>
+            <div>
+              <span class="label">Daily Price</span>
+              <span class="value">${{ carData.dailyPrice }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        @if (carData.description) {
+          <div class="description">
+            <h3><i class="bi bi-info-circle"></i> About this car</h3>
+            <p>{{ carData.description }}</p>
+          </div>
+        }
+
+        <!-- Reservations Info -->
+        @if (carData.reservations && carData.reservations.length > 0) {
+          <div class="reservations-info">
+            <h3><i class="bi bi-calendar-check"></i> Upcoming Reservations</h3>
+            <p class="reservation-count">This car has {{ carData.reservations.length }} active reservation(s)</p>
+          </div>
+        }
+
+        <!-- Book Button -->
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            class="book-btn"
+            [disabled]="!isCarAvailable(carData)"
+            (click)="bookCar()">
+            <i class="bi bi-calendar-plus"></i>
+            Book Now
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

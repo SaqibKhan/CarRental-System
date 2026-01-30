@@ -1,0 +1,134 @@
+.book-car-container {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .booking-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.car-summary mat-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.car-summary mat-card img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.car-summary h2 {
+  margin: 0 0 8px 0;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.year {
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.price {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+
+.price .amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.price .period {
+  color: #64748b;
+}
+
+.booking-form mat-card {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+mat-card-title i {
+  font-size: 1.4rem;
+  color: #667eea;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.return-date-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  color: #667eea;
+  font-weight: 500;
+
+  mat-icon {
+    color: #667eea;
+  }
+}
+
+.price-summary {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  color: #64748b;
+}
+
+.price-row.total {
+  border-top: 2px solid #cbd5e1;
+  margin-top: 12px;
+  padding-top: 16px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.form-actions button i {
+  margin-right: 8px;
+}

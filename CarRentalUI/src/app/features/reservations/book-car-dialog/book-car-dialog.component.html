@@ -1,0 +1,149 @@
+<div class="book-car-dialog">
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon>directions_car</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2>Complete Your Booking</h2>
+        <p class="header-subtitle">Secure your rental in just a few steps</p>
+      </div>
+    </div>
+    <button mat-icon-button (click)="cancel()" class="close-btn" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="dialog-content">
+    <!-- Car Summary Card -->
+    <div class="car-summary-card">
+      <div class="car-image-wrapper">
+        <img
+          [src]="getImageUrl(car.imageUrl)"
+          [alt]="car.carName"
+          (error)="onImageError($event)"
+          class="car-image">
+        <div class="car-type-badge">{{ getCarTypeLabel(car.carType) }}</div>
+      </div>
+      <div class="car-info">
+        <h3 class="car-name">{{ car.carName }}</h3>
+        <div class="car-meta">
+          <span class="meta-item">
+            <mat-icon>calendar_today</mat-icon>
+            {{ car.modelYear }}
+          </span>
+          <span class="meta-divider">•</span>
+          <span class="meta-item">
+            <mat-icon>local_gas_station</mat-icon>
+            Petrol
+          </span>
+        </div>
+        <div class="daily-rate">
+          <span class="rate-label">Daily Rate</span>
+          <span class="rate-value">${{ car.dailyPrice }}<span class="rate-period">/day</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form -->
+    <form [formGroup]="bookingForm" class="booking-form">
+      <div class="section-title">
+        <mat-icon>event</mat-icon>
+        <span>Rental Details</span>
+      </div>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Pick-up Date</mat-label>
+          <input matInput
+                 [matDatepicker]="startPicker"
+                 formControlName="startDateTime"
+                 [min]="minDate"
+                 readonly
+                 (click)="startPicker.open()">
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          @if (bookingForm.get('startDateTime')?.hasError('required') && bookingForm.get('startDateTime')?.touched) {
+            <mat-error>Pick-up date is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Duration (Days)</mat-label>
+          <input matInput type="number" formControlName="numberOfDays" min="1" max="30">
+          <mat-icon matPrefix>schedule</mat-icon>
+          @if (bookingForm.get('numberOfDays')?.hasError('required') && bookingForm.get('numberOfDays')?.touched) {
+            <mat-error>Required</mat-error>
+          }
+          @if (bookingForm.get('numberOfDays')?.hasError('min') && bookingForm.get('numberOfDays')?.touched) {
+            <mat-error>Min 1 day</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      @if (getEndDate(); as endDate) {
+        <div class="return-info">
+          <div class="return-icon">
+            <mat-icon>assignment_return</mat-icon>
+          </div>
+          <div class="return-details">
+            <span class="return-label">Return Date</span>
+            <span class="return-date">{{ endDate | date:'EEEE, MMMM d, y' }}</span>
+          </div>
+        </div>
+      }
+    </form>
+
+    <!-- Price Summary -->
+    @if (bookingForm.get('numberOfDays')?.value > 0) {
+      <div class="price-summary">
+        <div class="section-title">
+          <mat-icon>receipt_long</mat-icon>
+          <span>Price Summary</span>
+        </div>
+
+        <div class="price-breakdown">
+          <div class="price-line">
+            <span class="price-label">
+              Daily Rate
+              <span class="price-detail">× {{ bookingForm.get('numberOfDays')?.value }} days</span>
+            </span>
+            <span class="price-value">${{ car.dailyPrice }} × {{ bookingForm.get('numberOfDays')?.value }}</span>
+          </div>
+        </div>
+
+        <div class="total-section">
+          <div class="total-line">
+            <span class="total-label">Total Amount</span>
+            <span class="total-value">${{ totalPrice() | number:'1.2-2' }}</span>
+          </div>
+          <p class="tax-note">Inclusive of all taxes and fees</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Actions -->
+  <div class="dialog-actions">
+    <button mat-stroked-button (click)="cancel()" class="cancel-btn">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="isLoading() || bookingForm.invalid"
+      class="confirm-btn">
+      @if (isLoading()) {
+        <mat-spinner diameter="20" color="accent"></mat-spinner>
+        <span>Processing...</span>
+      } @else {
+        <mat-icon>check_circle</mat-icon>
+        <span>Confirm Booking</span>
+      }
+    </button>
+  </div>
+</div>

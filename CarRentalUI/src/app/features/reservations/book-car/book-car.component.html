@@ -1,0 +1,92 @@
+<div class="book-car-container">
+  <app-loading [isLoading]="isLoadingCar()" [fullscreen]="true"></app-loading>
+
+  @if (car(); as carData) {
+    <div class="booking-layout">
+      <div class="car-summary">
+        <mat-card>
+          <img mat-card-image [src]="carData.imageUrl || 'assets/car-placeholder.jpg'" [alt]="carData.carName">
+          <mat-card-content>
+            <h2>{{ carData.carName }}</h2>
+            <p class="year">{{ carData.modelYear }} • {{ getCarTypeLabel(carData.carType) }}</p>
+            <p class="price">
+              <span class="amount">${{ carData.dailyPrice }}</span>
+              <span class="period">/day</span>
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="booking-form">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>event</mat-icon>
+              Book Your Rental
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Pick-up Date</mat-label>
+                <input matInput [matDatepicker]="startPicker" formControlName="startDateTime" [min]="minDate">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+                @if (bookingForm.get('startDateTime')?.hasError('required') && bookingForm.get('startDateTime')?.touched) {
+                  <mat-error>Pick-up date is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Number of Days</mat-label>
+                <input matInput type="number" formControlName="numberOfDays" min="1">
+                @if (bookingForm.get('numberOfDays')?.hasError('required') && bookingForm.get('numberOfDays')?.touched) {
+                  <mat-error>Number of days is required</mat-error>
+                }
+                @if (bookingForm.get('numberOfDays')?.hasError('min') && bookingForm.get('numberOfDays')?.touched) {
+                  <mat-error>Minimum 1 day required</mat-error>
+                }
+              </mat-form-field>
+
+              @if (getEndDate(); as endDate) {
+                <div class="return-date-info">
+                  <mat-icon>event_available</mat-icon>
+                  <span>Return Date: {{ endDate | date:'fullDate' }}</span>
+                </div>
+              }
+
+              @if (bookingForm.get('numberOfDays')?.value > 0) {
+                <div class="price-summary">
+                  <div class="price-row">
+                    <span>Daily Rate</span>
+                    <span>${{ carData.dailyPrice }}</span>
+                  </div>
+                  <div class="price-row">
+                    <span>Number of Days</span>
+                    <span>{{ bookingForm.get('numberOfDays')?.value }}</span>
+                  </div>
+                  <div class="price-row total">
+                    <span>Total</span>
+                    <span>${{ totalPrice() }}</span>
+                  </div>
+                </div>
+              }
+
+              <div class="form-actions">
+                <button mat-button type="button" (click)="cancel()">Cancel</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
+                  @if (isLoading()) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                   Confirm Booking
+                  }
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div>

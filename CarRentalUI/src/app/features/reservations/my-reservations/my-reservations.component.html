@@ -1,0 +1,78 @@
+<div class="reservations-container">
+  <header class="page-header">
+    <h1>
+      <mat-icon>event_note</mat-icon>
+      My Reservations
+    </h1>
+  </header>
+
+  <app-loading [isLoading]="isLoading()"></app-loading>
+
+  @if (!isLoading()) {
+    @if (reservations().length === 0) {
+      <div class="no-reservations">
+        <mat-icon>event_busy</mat-icon>
+        <h3>No reservations yet</h3>
+        <p>Browse our cars and make your first booking!</p>
+        <a mat-raised-button color="primary" routerLink="/cars">
+          <mat-icon>directions_car</mat-icon>
+          Browse Cars
+        </a>
+      </div>
+    } @else {
+      <div class="reservations-grid">
+        @for (reservation of reservations(); track reservation.id) {
+          <mat-card class="reservation-card">
+            @if (reservation.car) {
+              <img mat-card-image [src]="reservation.car.imageUrl || 'assets/car-placeholder.jpg'" [alt]="reservation.car.carName">
+            }
+
+            <mat-card-content>
+              @if (reservation.car) {
+                <h3>{{ reservation.car.carName }}</h3>
+                <p class="car-details">{{ reservation.car.modelYear }} • {{ getCarTypeLabel(reservation.car.carType) }}</p>
+              }
+
+              <mat-chip [class]="'status-' + getReservationStatus(reservation).toLowerCase()">
+                {{ getReservationStatus(reservation) }}
+              </mat-chip>
+
+              <div class="dates">
+                <div class="date-item">
+                  <mat-icon>calendar_today</mat-icon>
+                  <div>
+                    <span class="label">Pick-up</span>
+                    <span class="value">{{ reservation.startDateTime | date:'medium' }}</span>
+                  </div>
+                </div>
+                <div class="date-item">
+                  <mat-icon>event_available</mat-icon>
+                  <div>
+                    <span class="label">Return</span>
+                    <span class="value">{{ reservation.endDateTime | date:'medium' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              @if (reservation.car) {
+                <p class="total-price">
+                  <span class="days">{{ reservation.numberOfDays }} day(s)</span>
+                  Total: <strong>${{ getTotalPrice(reservation) }}</strong>
+                </p>
+              }
+            </mat-card-content>
+
+            <mat-card-actions>
+              @if (canCancelReservation(reservation)) {
+                <button mat-button color="warn" (click)="cancelReservation(reservation)">
+                  <mat-icon>cancel</mat-icon>
+                  Cancel
+                </button>
+              }
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

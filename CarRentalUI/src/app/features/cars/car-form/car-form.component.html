@@ -1,0 +1,90 @@
+<div class="car-form-container">
+  <mat-card class="car-form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode() ? 'edit' : 'add' }}</mat-icon>
+        {{ isEditMode() ? 'Edit Car' : 'Add New Car' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Car Name</mat-label>
+            <input matInput formControlName="carName" placeholder="e.g., Toyota Camry">
+            @if (carForm.get('carName')?.hasError('required') && carForm.get('carName')?.touched) {
+              <mat-error>Car name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Number Plate</mat-label>
+            <input matInput formControlName="numberPlate" placeholder="e.g., ABC-123">
+            @if (carForm.get('numberPlate')?.hasError('required') && carForm.get('numberPlate')?.touched) {
+              <mat-error>Number plate is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Model Year</mat-label>
+            <input matInput formControlName="modelYear" placeholder="e.g., 2024">
+            @if (carForm.get('modelYear')?.hasError('required') && carForm.get('modelYear')?.touched) {
+              <mat-error>Model year is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Car Type</mat-label>
+            <mat-select formControlName="carType">
+              @for (type of carTypes; track type.value) {
+                <mat-option [value]="type.value">{{ type.label }}</mat-option>
+              }
+            </mat-select>
+            @if (carForm.get('carType')?.hasError('required') && carForm.get('carType')?.touched) {
+              <mat-error>Car type is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Daily Price ($)</mat-label>
+            <input matInput type="number" formControlName="dailyPrice" placeholder="e.g., 50">
+            <mat-icon matPrefix>attach_money</mat-icon>
+            @if (carForm.get('dailyPrice')?.hasError('required') && carForm.get('dailyPrice')?.touched) {
+              <mat-error>Daily price is required</mat-error>
+            }
+            @if (carForm.get('dailyPrice')?.hasError('min') && carForm.get('dailyPrice')?.touched) {
+              <mat-error>Daily price must be at least $1</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Image URL</mat-label>
+            <input matInput formControlName="imageUrl" placeholder="https://example.com/car-image.jpg">
+            <mat-icon matPrefix>image</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3" placeholder="Describe the car..."></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
+            @if (isLoading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              {{ isEditMode() ? 'Update Car' : 'Add Car' }}
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

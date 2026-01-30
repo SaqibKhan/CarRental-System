@@ -1,0 +1,232 @@
+﻿@use "@angular/material" as mat;
+
+/* ===== CSS Variables (Theme) ===== */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --dark-gradient: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-elevated: 0 20px 40px rgba(0, 0, 0, 0.15);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --bg-page: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* ===== Global Base ===== */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg-page);
+  background-attachment: fixed;
+}
+
+/* ===== Container Utilities ===== */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page {
+  padding: 32px 0;
+  min-height: calc(100vh - 72px);
+}
+
+/* ===== Angular Material Refinements ===== */
+mat-toolbar.mat-primary {
+  background: var(--primary-gradient) !important;
+  backdrop-filter: saturate(1.5) blur(10px);
+  box-shadow: var(--shadow-soft);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+mat-card {
+  border-radius: var(--radius-lg) !important;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-elevated);
+}
+
+mat-form-field {
+  --mdc-filled-text-field-container-shape: var(--radius-md);
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background: var(--primary-gradient) !important;
+  border-radius: 999px;
+  padding: 0 24px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mat-mdc-raised-button.mat-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.mat-mdc-raised-button.mat-accent {
+  background: var(--accent-gradient) !important;
+  border-radius: 999px;
+  padding: 0 24px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(245, 87, 108, 0.4);
+}
+
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-stroked-button {
+  text-transform: none;
+  font-weight: 600;
+  border-radius: 999px !important;
+}
+
+.mat-mdc-stroked-button.mat-primary {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+/* ===== Chips ===== */
+.mat-mdc-chip {
+  border-radius: 999px !important;
+  font-weight: 500;
+}
+
+/* ===== Page Headers ===== */
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px 0;
+}
+
+.page-header h1 mat-icon,
+.page-header h1 i {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  -webkit-text-fill-color: #667eea;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* ===== Icon Styling ===== */
+.bi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Glass Card Variant ===== */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ===== Footer ===== */
+footer.app-footer {
+  margin-top: 48px;
+  padding: 32px 0;
+  background: var(--dark-gradient);
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+footer.app-footer a {
+  color: #a5b4fc;
+  text-decoration: none;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* ===== Car Details Dialog Panel ===== */
+.car-details-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-surface {
+    border-radius: 20px !important;
+    overflow: hidden;
+  }
+}
+
+/* ===== Book Car Dialog Panel ===== */
+.book-car-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-surface {
+    border-radius: 20px !important;
+    overflow: hidden;
+    background: #ffffff !important;
+  }
+
+  // Fix button text visibility
+  .cancel-btn {
+    .mdc-button__label {
+      color: #64748b !important;
+    }
+  }
+
+  .confirm-btn {
+    .mdc-button__label {
+      color: #ffffff !important;
+    }
+  }
+}

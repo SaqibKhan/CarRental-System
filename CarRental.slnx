@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/CarRentalUi/" />
+  <Project Path="CarRental.AppHost/CarRental.AppHost.csproj" />
+  <Project Path="CarRental.Application/CarRental.Application.csproj" />
+  <Project Path="CarRental.Domain/CarRental.Domain.csproj" />
+  <Project Path="CarRental.Infrastructure/CarRental.Infrastructure.csproj" />
+  <Project Path="CarRental.ServiceDefaults/CarRental.ServiceDefaults.csproj" />
+  <Project Path="CarRental.Tests/CarRental.Tests.csproj" />
+  <Project Path="CarRental/CarRental.csproj" />
+</Solution>

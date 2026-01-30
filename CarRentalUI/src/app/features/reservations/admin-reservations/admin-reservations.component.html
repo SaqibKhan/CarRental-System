@@ -1,0 +1,89 @@
+<div class="admin-container">
+  <header class="page-header">
+    <h1>
+      <mat-icon>admin_panel_settings</mat-icon>
+      All Reservations
+    </h1>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Filter by Status</mat-label>
+      <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilter()">
+        <mat-option [value]="null">All</mat-option>
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ status }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </header>
+
+  <app-loading [isLoading]="isLoading()"></app-loading>
+
+  @if (!isLoading()) {
+    <table mat-table [dataSource]="filteredReservations()" class="mat-elevation-z2">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let r">{{ r.id | slice:0:8 }}...</td>
+      </ng-container>
+
+      <ng-container matColumnDef="car">
+        <th mat-header-cell *matHeaderCellDef>Car</th>
+        <td mat-cell *matCellDef="let r">
+          @if (r.car) {
+            {{ r.car.carName }}
+            <br>
+            <small>{{ r.car.numberPlate }}</small>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Customer</th>
+        <td mat-cell *matCellDef="let r">
+          @if (r.user) {
+            {{ r.user.firstName }} {{ r.user.lastName }}
+            <br>
+            <small>{{ r.user.email }}</small>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dates">
+        <th mat-header-cell *matHeaderCellDef>Dates</th>
+        <td mat-cell *matCellDef="let r">
+          {{ r.startDateTime | date:'short' }} - {{ r.endDateTime | date:'short' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let r">
+          {{ r.numberOfDays }} day(s)<br>
+          <strong>${{ getTotalPrice(r) }}</strong>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let r">
+          <mat-chip [class]="'status-' + getReservationStatus(r).toLowerCase()">
+            {{ getReservationStatus(r) }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let r">
+          @if (canDeleteReservation(r)) {
+            <button mat-icon-button color="warn" (click)="deleteReservation(r)" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  }
+</div>

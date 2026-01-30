@@ -1,0 +1,94 @@
+<div class="home-container">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content animate-fade-in">
+      <div class="hero-icon">
+        <i class="bi bi-car-front-fill"></i>
+      </div>
+      <h1>Find Your Perfect Ride</h1>
+      <p>Discover premium vehicles at unbeatable prices. Your journey starts here.</p>
+      <div class="hero-actions">
+        <a mat-raised-button color="primary" routerLink="/cars" class="cta-button">
+          <i class="bi bi-search"></i>
+          Browse Cars
+        </a>
+        @if (!authService.isAuthenticated()) {
+          <a mat-stroked-button color="primary" routerLink="/auth/register" class="secondary-btn">
+            <i class="bi bi-person-plus"></i>
+            Get Started Free
+          </a>
+        }
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">500+</span>
+          <span class="stat-label">Vehicles</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">10K+</span>
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">50+</span>
+          <span class="stat-label">Locations</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Why Choose Us?</h2>
+    <div class="features-grid">
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <div class="feature-icon-wrap">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <h3>Quality Vehicles</h3>
+          <p>All our cars are regularly maintained and inspected for your safety</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <div class="feature-icon-wrap">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <h3>Best Prices</h3>
+          <p>Competitive rates with no hidden fees or surprises</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <div class="feature-icon-wrap">
+            <i class="bi bi-headset"></i>
+          </div>
+          <h3>24/7 Support</h3>
+          <p>Our team is always ready to help you on the road</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <div class="feature-icon-wrap">
+            <i class="bi bi-lightning-charge-fill"></i>
+          </div>
+          <h3>Easy Booking</h3>
+          <p>Book your car in minutes with our simple online system</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-content">
+      <h2>Ready to Hit the Road?</h2>
+      <p>Start your journey today with our wide selection of premium vehicles</p>
+      <a mat-raised-button color="accent" routerLink="/cars" class="cta-main-btn">
+        <i class="bi bi-arrow-right-circle-fill"></i>
+        Find Your Car
+      </a>
+    </div>
+  </section>
+</div>

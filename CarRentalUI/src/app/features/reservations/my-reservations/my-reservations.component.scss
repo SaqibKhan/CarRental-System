@@ -1,0 +1,143 @@
+.reservations-container {
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 12px 0;
+}
+
+.page-header h1 i {
+  font-size: 2.5rem;
+  -webkit-text-fill-color: #667eea;
+}
+
+.no-reservations {
+  text-align: center;
+  padding: 64px 24px;
+  color: #64748b;
+}
+
+.no-reservations i {
+  font-size: 4rem;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.no-reservations h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.3rem;
+  color: #1e293b;
+}
+
+.reservations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+.reservation-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.reservation-card img {
+  height: 180px;
+  object-fit: cover;
+}
+
+.reservation-card h3 {
+  margin: 0 0 12px 0;
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: white !important;
+}
+
+.status-confirmed {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  color: white !important;
+}
+
+.status-active {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white !important;
+}
+
+.status-completed {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+  color: white !important;
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-item mat-icon,
+.date-item i {
+  color: #667eea;
+  font-size: 1.3rem;
+}
+
+.date-item .label {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.date-item .value {
+  display: block;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.total-price {
+  font-size: 1.1rem;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.total-price strong {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.2rem;
+}
