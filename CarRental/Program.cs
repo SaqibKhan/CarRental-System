@@ -2,6 +2,7 @@ using CarRental.Application;
 using CarRental.Infrastructure;
 using CarRental.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
